@@ -4,7 +4,7 @@ $a = new TokenUtil();
 
 $data = $a->generateToken("123aaa");
 
-echo $a->verifyToken($data);
+//echo $a->verifyToken($data);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,32 +20,29 @@ echo $a->verifyToken($data);
 
 </head>
 <body>
+<!--设置app铺满整个页面-->
 <div id="app">
-    <el-button>Default</el-button>
-    <el-button type="primary">Primary</el-button>
-    <el-button type="success">Success</el-button>
-    <el-button type="info">Info</el-button>
-    <el-button type="warning">Warning</el-button>
-    <el-button type="danger">Danger</el-button>
         <el-container>
-            <el-header>Header</el-header>
+            <el-header>
+                <el-alert title="schuanhe 自用，其他人不能使用哦" type="success" :closable="false" />
+            </el-header>
             <el-main>
                 <el-card class="box-card">
                     <el-form
                             :label-position="labelPosition"
                             label-width="100px"
-                            :model="formLabelAlign"
+                            :model="form"
                             style="max-width: 460px"
                     >
-                        <el-form-item label="Name">
-                            <el-input v-model="formLabelAlign.name" />
+
+            <!-- <el-tag type="primary">Tag 1</el-tag> -->
+
+                        <el-form-item label="username">
+                            <el-input v-model="form.username" />
                         </el-form-item>
-                        <el-form-item label="Activity zone">
-                            <el-input v-model="formLabelAlign.region" />
-                        </el-form-item>
-                        <el-form-item label="Activity form">
-                            <el-input v-model="formLabelAlign.type" />
-                        </el-form-item>
+
+                        <el-button>Default</el-button>
+
                     </el-form>
                 </el-card>
             </el-main>
@@ -54,20 +51,47 @@ echo $a->verifyToken($data);
 </div>
 
 <script>
-    const { createApp } = Vue;
-    const app = createApp({
-        data() {
-            return {
-                formLabelAlign: {
-                    name: '',
-                    region: '',
-                    type: ''
-                }
-            };
+    const { createApp, ref } = Vue;
+
+    const App = {
+        setup() {
+
+            const form = ref({
+                username: '',
+                region: '',
+                type: ''
+            });
+            return { form };
+
+
         }
-    });
+    };
+
+    const app = createApp(App);
     app.use(ElementPlus);
     app.mount('#app');
 </script>
 </body>
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+    }
+
+    #app {
+        height: 100%;
+        width: 100%;
+    }
+
+    .box-card {
+        max-width: 460px;
+        margin: auto;
+    }
+
+    .el-main {
+    /*    设置内部居中*/
+        text-align: center;
+        line-height: 60px;
+    }
+</style>
 </html>
