@@ -11,13 +11,13 @@ class User extends Model
 
     /**
      * User constructor.
-     * @param $name
-     * @param $age
-     * @param $sex
-     * @param $phone
-     * @param $email
+     * @param string $name
+     * @param string $age
+     * @param string $sex
+     * @param string $phone
+     * @param string $email
      */
-    public function __construct($name, $age, $sex, $phone, $email)
+    public function __construct(string $name='', string $age='', string $sex='', string $phone='', string $email='')
     {
         $this->name = $name;
         $this->age = $age;

@@ -35,7 +35,7 @@ $data = $a->generateToken("123aaa");
                             style="max-width: 460px"
                     >
 
-            <!-- <el-tag type="primary">Tag 1</el-tag> -->
+            <el-tag type="primary">Tag 1</el-tag>
 
                         <el-form-item label="username">
                             <el-input v-model="form.username" />
