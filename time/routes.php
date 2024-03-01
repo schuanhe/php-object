@@ -1,12 +1,17 @@
 <?php
 
-$uri = $_SERVER['REQUEST_URI'];
+// 获取原始的 URI
+$rawUri = $_SERVER['REQUEST_URI'];
+
+// 使用 parse_url 解析 URI，提取路径部分
+$parsedUri = parse_url($rawUri);
+$uri = $parsedUri['path'];
 $method = $_SERVER['REQUEST_METHOD'];
 
+// echo $uri . ' ' . $method;
 
 // 是否有匹配的
 $is_matched = false;
-
 
 // 处理路由
 $routes = array(
@@ -58,7 +63,12 @@ if ($matchedRoute) {
     $controller = new $className();
     // 调用相应的操作
     if (method_exists($controller, $actionName)) {
-        echo $controller->$actionName();
+        $params = array_merge($_GET, $_POST);
+
+        // var_dump($params);
+        parse_str($parsedUri['query'] ?? '', $params);
+
+        echo $controller->$actionName($params);
     } else {
         // 处理方法不存在的情况
         echo json_encode(['error' => 'Method Not Found']);

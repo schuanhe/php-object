@@ -9,8 +9,12 @@ class EventsController
         $this->eventsService = new EventsService();
     }
 
-    public function getEventsByUserId($userId = 1): string
+    public function getEventsByUserId($params): string
     {
-        return JSON_encode($this->eventsService->getEventsListByUserId($userId));
+        if (!isset($params['userId'])) {
+            return json_encode(array());
+        }
+        $userId = $params['userId'];
+        return json_encode($this->eventsService->getEventsListByUserId($userId));
     }
 }
