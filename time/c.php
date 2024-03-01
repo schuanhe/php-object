@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include 'mode/Events.php';
+include 'Model/Events.php';
 
 $a = new Events();
 
