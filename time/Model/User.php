@@ -1,6 +1,6 @@
 <?php
 
-include './lib/BaseModel.php';
+include_once __DIR__ . '/./lib/BaseModel.php';
 
 class User extends BaseModel
 {

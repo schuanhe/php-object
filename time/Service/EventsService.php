@@ -1,7 +1,7 @@
 <?php
 
-include '../Utils/Database.php';
-include '../Model/Events.php';
+include_once __DIR__ . '/../Utils/Database.php';
+include_once __DIR__ . '/../Model/Events.php';
 
 class EventsService
 {

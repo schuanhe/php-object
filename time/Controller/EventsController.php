@@ -1,5 +1,5 @@
 <?php
-include '../Service/EventsService.php';
+include_once __DIR__ . '/../Service/EventsService.php';
 
 class EventsController
 {
@@ -9,8 +9,8 @@ class EventsController
         $this->eventsService = new EventsService();
     }
 
-    public function getEventsByUserId($userId): array
+    public function getEventsByUserId($userId = 1): string
     {
-        return $this->eventsService->getEventsListByUserId($userId);
+        return JSON_encode($this->eventsService->getEventsListByUserId($userId));
     }
 }
