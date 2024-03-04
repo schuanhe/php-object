@@ -8,6 +8,7 @@ $parsedUri = parse_url($rawUri);
 $uri = $parsedUri['path'];
 $method = $_SERVER['REQUEST_METHOD'];
 
+
 // echo $uri . ' ' . $method;
 
 // 是否有匹配的
@@ -63,19 +64,23 @@ if ($matchedRoute) {
     $controller = new $className();
     // 调用相应的操作
     if (method_exists($controller, $actionName)) {
-        $params = array_merge($_GET, $_POST);
 
-        // var_dump($params);
-        parse_str($parsedUri['query'] ?? '', $params);
+        if($method === 'GET'){
+            parse_str($parsedUri['query'] ?? '', $params);
+        }elseif ($method === 'POST'){
+            $params = $_POST;
+        }else{
+            $params = [];
+        }
 
-        echo $controller->$actionName($params);
+        echo json_encode($controller->$actionName($params));
     } else {
         // 处理方法不存在的情况
         echo json_encode(['error' => 'Method Not Found']);
     }
 } else {
-    // 处理静态文件
-    $staticFilePath = __DIR__ . '/static' . $uri;
+
+    $staticFilePath = __DIR__ . '/static' . $uri. '.html';
 
     // 处理index
     if ($uri === '/') {

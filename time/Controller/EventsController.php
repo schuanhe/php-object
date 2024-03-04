@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__ . '/../Service/EventsService.php';
+include_once __DIR__ . '/../Utils/ResponseUtil.php';
 
 class EventsController
 {
@@ -9,12 +10,12 @@ class EventsController
         $this->eventsService = new EventsService();
     }
 
-    public function getEventsByUserId($params): string
+    public function getEventsByUserId($params): array
     {
         if (!isset($params['userId'])) {
-            return json_encode(array());
+            return ResponseUtil::error('请传入参数');
         }
         $userId = $params['userId'];
-        return json_encode($this->eventsService->getEventsListByUserId($userId));
+        return ResponseUtil::success($this->eventsService->getEventsListByUserId($userId));
     }
 }
