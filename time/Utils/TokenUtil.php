@@ -3,10 +3,12 @@ class TokenUtil
 {
     private $secret_key = "schuanhe";
     // 生成令牌
-    public function generateToken($data): string
+    public function generateToken($data, $expiration = 3600 * 24 * 3): string
     {
+        $currentTime = time();
+
         $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
-        $payload = json_encode(['data' => $data]);
+        $payload = json_encode(['data' => $data, 'exp' => $currentTime + $expiration]);
 
         $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
         $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
@@ -17,7 +19,7 @@ class TokenUtil
         return $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
     }
     // 验证令牌
-    public function verifyToken($token): string
+    public function verifyToken($token): array
     {
         list($base64UrlHeader, $base64UrlPayload, $base64UrlSignature) = explode('.', $token);
 
@@ -28,9 +30,15 @@ class TokenUtil
 
         // 验证签名是否匹配
         if (hash_equals($expectedSignature, $signature)) {
-            return $payload['data'];
+            // 验证令牌是否过期
+            if (isset($payload['exp']) && $payload['exp'] >= time()) {
+                return array('code' => true, 'msg' => '验证成功', 'data' => $payload);
+            } else {
+                // 令牌已过期
+                return array('code' => false, 'msg' => '令牌已过期');
+            }
         } else {
-            return false;
+            return array('code' => false, 'msg' => '签名不匹配');
         }
     }
 }

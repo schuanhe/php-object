@@ -1,13 +1,5 @@
-<?php
-include 'Utils/TokenUtil.php';
-$a = new TokenUtil();
-
-$data = $a->generateToken("123aaa");
-
-//echo $a->verifyToken($data);
-?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -31,31 +23,31 @@ $data = $a->generateToken("123aaa");
         <el-main>
             <el-card class="box-card">
                 <el-form
-                        :label-position="labelPosition"
+                        label-position="top"
                         label-width="100px"
                         :model="form"
                         style="max-width: 460px"
                 >
-
-                    <el-tag type="primary">Tag 1</el-tag>
-
-                    <el-form-item label="name">
+                <el-text size="large">登录你的账号</el-text>
+                    <el-form-item label="用户名">
                         <el-input v-model="form.name"/>
                     </el-form-item>
-                    <el-form-item label="password">
-                        <el-input v-model="form.password"/>
+                    <el-form-item label="密码">
+                        <el-input type="password" v-model="form.password"/>
                     </el-form-item>
-                    <el-button>Default</el-button>
-
+                    <el-button style="width: 100%;" type="primary" @click="login">登录</el-button>
                 </el-form>
             </el-card>
         </el-main>
-        <el-footer>Footer</el-footer>
+        <el-footer>
+
+        </el-footer>
     </el-container>
 </div>
 <script>
     /* global Vue, ElementPlus,axios */
     const {createApp, ref} = Vue;
+    const {ElMessage} = ElementPlus;
 
     const App = {
         setup() {
@@ -63,30 +55,34 @@ $data = $a->generateToken("123aaa");
                 name: '',
                 password: ''
             });
-            return {form};
-
             // 使用登录方法
             const login = async () => {
-            try {
-                const response = await axios.post('./Controller/ControllerUser.php', {
-                    method: 'login',
-                    username: form.username,
-                    password: form.password,
-                });
 
+            try {
+                const response = await axios.post('./api/login', {
+                    name: form.value.name,
+                    password: form.value.password,
+                });
                 // 根据后端返回的数据进行处理
-                if (response.data.success) {
-                    ElMessage.success('登录成功');
+                if (response.data.success === 200) {
+                    ElMessage.success('登录成功');  
+                    // 设置token，这里假设后端返回的token存在response.data.token中
+                    const token = response.data.data.token;
+          
+                    // 设置到期时间为data.exp（时间戳格式）
+                        const expirationTime = new Date(response.data.data.exp * 1000); // Convert timestamp to milliseconds
+                    // 将token和到期时间设置到cookie中
+                    document.cookie = `token=${token}; expires=${expirationTime.toUTCString()}; path=/`;
+                    // 跳转到首页
+                    window.location.href = './index.html';
                 } else {
-                    ElMessage.error('登录失败，用户名或密码错误');
+                    ElMessage.error(response.data.message);
                 }
             } catch (error) {
-                console.error('登录请求失败:', error);
                 ElMessage.error('登录请求失败');
             }
         };
-
-
+        return {form, login};
         }
     };
 
