@@ -1,5 +1,8 @@
 <?php
+namespace Utils;
 
+use SQLite3;
+use SQLite3Result;
 class Database {
     private $db;
     // 构造函数，用于连接数据库

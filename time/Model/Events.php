@@ -27,15 +27,15 @@ class Events extends BaseModel
 
     /**
      * @var string
-     * 开始时间
+     * 事件开始时间
      */
-    protected $start_time;
+    protected $eve_time;
 
     /**
      * @var string
-     * 结束时间
+     * 事件持续时间
      */
-    protected $end_time;
+    protected $eve_duration;
 
     /**
      * @var string
@@ -60,5 +60,17 @@ class Events extends BaseModel
      * 对象id
      */
     protected $object_id;
+
+    /**
+     * @var int
+     * 是否循环
+     */
+    protected $is_loop;
+
+    /**
+     * @var string
+     * 循环周期
+     */
+    protected $loop_time;
 
 }

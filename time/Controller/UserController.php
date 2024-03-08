@@ -24,7 +24,7 @@ class UserController
             return ResponseUtil::fail('用户名或密码错误');
         }
         // 生成token
-        $token = (new TokenUtil)->generateToken($user['id'],3600 * 24 * 3);
+        $token = TokenUtil::generateToken($user['id'],3600 * 24 * 3);
         $data = [
             'token' => $token,
             'exp' => time() + (3600 * 24 * 3)

@@ -1,7 +1,9 @@
 <?php
-
-include_once __DIR__ . '/../Utils/Database.php';
+namespace Service;
+//include_once __DIR__ . '/../Utils/Database.php';
 include_once __DIR__ . '/../Model/Events.php';
+
+use Utils\Database;
 
 class EventsService
 {
