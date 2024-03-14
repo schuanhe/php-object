@@ -3,34 +3,49 @@
 
 class FullcalendarUtil
 {
-    function getFullcalendarByEvent($eve_start,$eve_duration,$is_loop,$loop_time,$star_time,$end_time){
-        // 全部转为时间戳
-        $star_time = strtotime($star);
-        $end_time = strtotime($end);
-        // 周期的时间
-        $cycleInterval_time = strtotime("+".$cycleInterval." ".$cycleUnit) - time();
-        $cycleStart_time = strtotime($cycleStart);
-        $cycleEnd_time = strtotime($cycleEnd);
-        // 事件持续时间
-        $eve_duration = $cycleEnd_time - $cycleStart_time;
-        // 算出离$star离$cycleStart的时间相差几个周期
-        $quotient = intdiv( $star_time - $cycleStart_time, $cycleInterval_time);
-        // 最近开始周期的时间,防止star时间截至导致star不显示周期，默认提前一个周期显示
-        $cycleStart_time_one = ($cycleStart_time + $quotient * $cycleInterval_time) - $cycleInterval_time;
-        // 如果第一个周期结束时间小于start_time,则从下一个周期开始
-        if($cycleStart_time_one + $eve_duration < $star_time){
-            $cycleStart_time_one += $cycleInterval_time;
+    static function getFullcalendarByEvent($eve_start,$eve_duration,$is_loop,$loop_time,$star_time,$end_time): array
+    {
+        // 需不需要循环
+        if ($is_loop) {
+            $date = self::getLoopFull($eve_start,$eve_duration,$loop_time,$star_time,$end_time);
+        } else {
+            $date = self::getNoLoopFull($eve_start,$eve_duration,$star_time,$end_time);
         }
-
-        $this->demo2($star_time,$end_time,$cycleInterval_time,$cycleStart_time_one,$eve_duration);
+        return $date;
     }
 
-// 给出开始时间，结束时间，周期间隔时间，事件开始时间，事件持续时间
-    function demo2($star_time,$end_time,$cycleInterval_time,$cycleStart_time,$eve_duration): array
+
+    static function getNoLoopFull($eve_start,$eve_duration,$star_time,$end_time): array
     {
+        $date = [];
+        if ($eve_start > $star_time && $eve_start < $end_time) {
+            if ($eve_start + $eve_duration < $end_time) {
+                // 事件结束时间小于显示结束时间 |__----__|
+                $date[] = array('cycleStart_time'=>$eve_start,'cycleEnd_time'=>$eve_start + $eve_duration);
+            } else {
+                // 事件结束时间大于显示结束时间 |____--|--
+                $date[] = array('cycleStart_time'=>$eve_start,'cycleEnd_time'=>$end_time);
+            }
+        }elseif ($eve_start + $eve_duration > $star_time){
+            // 事件结束时间大于显示开始事件 --|--____|
+            $date[] = array('cycleStart_time'=>$star_time,'cycleEnd_time'=>$eve_start + $eve_duration);
+        }
+        return $date;
+    }
+
+    static function getLoopFull($eve_start,$eve_duration,$loop_time,$star_time,$end_time): array
+    {
+        // 算出离$star离$eve_start的时间相差几个周期
+        $quotient = intdiv( $star_time - $eve_start, $loop_time);
+        // 最近开始周期的时间
+        $eve_start_one = ($eve_start + $quotient * $loop_time);
+        // 如果第一个周期结束时间小于start_time,则从下一个周期开始
+        if($eve_start_one + $eve_duration - $loop_time > $star_time) {
+            $eve_start_one -= $loop_time;
+        }
         $data = [];
-        for ($cycleStart_time_this = $cycleStart_time;$cycleStart_time_this < $end_time; $cycleStart_time_this += $cycleInterval_time) {
-            $data[] = array('$cycleStart_time'=>$cycleStart_time_this,'$cycleEnd_time'=>$cycleStart_time_this + $eve_duration);
+        for ($cycleStart_time_this = $eve_start_one;$cycleStart_time_this < $end_time; $cycleStart_time_this += $loop_time) {
+            $data[] = array('cycleStart_time'=>$cycleStart_time_this,'cycleEnd_time'=>$cycleStart_time_this + $eve_duration);
         }
         return $data;
     }

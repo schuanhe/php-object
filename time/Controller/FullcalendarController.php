@@ -1,7 +1,5 @@
 <?php
-include_once __DIR__ . '../Utils/TokenUtil.php';
-include_once __DIR__ . '/../Utils/ResponseUtil.php';
-
+use Service\EventsService;
 class FullcalendarController
 {
     private $userId;
@@ -14,16 +12,21 @@ class FullcalendarController
      */
     public function __construct()
     {
-        $tokens = TokenUtil::checkToken();
-        if ($tokens['code']) {
-            $this->userId = $tokens['data']['id'];
-            $this->eventsService = new EventsService();
-            $this->userService = new UserService();
-        }else{
+        try {
+            $tokens = TokenUtil::checkToken();
+            if ($tokens['code']) {
+                $this->userId = $tokens['data']['id'];
+                $this->eventsService = new EventsService();
+                $this->userService = new UserService();
+            }else{
+                throw new Exception("请登录");
+            }
+        }catch (Exception $e){
             throw new Exception("请登录");
         }
+
     }
-    // 获取用户的所有事件
+    // 获取用户的所有事件并且返回Full
     public function getAllEvents(): array
     {
         if (!isset($this->userId)) {

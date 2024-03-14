@@ -1,5 +1,4 @@
 <?php
-include './Utils/ResponseUtil.php';
 // 获取原始的 URI
 $rawUri = $_SERVER['REQUEST_URI'];
 

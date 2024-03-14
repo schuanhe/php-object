@@ -1,6 +1,4 @@
 <?php
-include_once __DIR__ . '/../Service/EventsService.php';
-include_once __DIR__ . '/../Utils/ResponseUtil.php';
 use Service\EventsService;
 
 class EventsController
@@ -20,5 +18,3 @@ class EventsController
         return ResponseUtil::success($this->eventsService->getEventsListByUserId($userId));
     }
 }
-$a = new EventsController();
-echo json_encode($a->getEventsByUserId(['userId' => 1]),true);
