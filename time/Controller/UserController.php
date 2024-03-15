@@ -1,7 +1,5 @@
 <?php
-include_once __DIR__ . '/../Service/UserService.php';
-include_once __DIR__ . '/../Utils/ResponseUtil.php';
-include_once __DIR__ . '/../Utils/TokenUtil.php';
+use Service\UserService;
 
 class UserController
 {

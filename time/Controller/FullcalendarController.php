@@ -1,5 +1,6 @@
 <?php
 use Service\EventsService;
+use Service\UserService;
 class FullcalendarController
 {
     private $userId;
@@ -12,18 +13,20 @@ class FullcalendarController
      */
     public function __construct()
     {
-        try {
-            $tokens = TokenUtil::checkToken();
-            if ($tokens['code']) {
-                $this->userId = $tokens['data']['id'];
-                $this->eventsService = new EventsService();
-                $this->userService = new UserService();
-            }else{
-                throw new Exception("请登录");
-            }
-        }catch (Exception $e){
-            throw new Exception("请登录");
-        }
+        $this->userId = "1";
+        $this->eventsService = new EventsService();
+//        try {
+//            $tokens = TokenUtil::checkToken();
+//            if ($tokens['code']) {
+//                $this->userId = $tokens['data']['id'];
+//                $this->eventsService = new EventsService();
+//                $this->userService = new UserService();
+//            }else{
+//                throw new Exception("请登录");
+//            }
+//        }catch (Exception $e){
+//            throw new Exception("请登录");
+//        }
 
     }
     // 获取用户的所有事件并且返回Full

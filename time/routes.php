@@ -35,10 +35,16 @@ $routes = array(
         'auth' => true
     ),
     array(
+        'pattern' => '/test2',
+        'controller' => 'Controller/UserController',
+        'action' => 'register',
+        'auth' => false
+    ),
+    array(
         'pattern' => '/api/login',
         'controller' => 'Controller/UserController',
         'action' => 'login',
-        'auth' => true
+        'auth' => false
     ),
 );
 
@@ -56,18 +62,20 @@ if ($matchedRoute) {
     $controllerName = $matchedRoute['controller'];
     $actionName = $matchedRoute['action'];
     $is_matched = true;
-    // TODO: 需要认证的
+    $tokenData = array();
+    if ($matchedRoute['auth']) {
+        $tokenData = authToken();
+    }
 
     if (file_exists($controllerName . '.php') && is_file($controllerName . '.php')) {
         try {
-            // 自动加载控制器类
-            include_once $controllerName . '.php';
             $className = basename($controllerName);
             $controller = new $className();
             // 调用相应的操作
             if (method_exists($controller, $actionName)) {
                 if ($method === 'GET') {
                     parse_str($parsedUri['query'] ?? '', $params);
+
                 } elseif ($method === 'POST') {
                     if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
                         $params = json_decode(file_get_contents('php://input'), true);
@@ -77,7 +85,7 @@ if ($matchedRoute) {
                 } else {
                     $params = [];
                 }
-                echo json_encode($controller->$actionName($params));
+                echo json_encode($controller->$actionName($params, $tokenData));
             } else {
                 // 处理方法不存在的情况
                 echo json_encode(ResponseUtil::error('方法不存在'));
@@ -109,4 +117,21 @@ if (!$is_matched) {
     // 如果没有匹配的路由
     http_response_code(404);
     echo json_encode(ResponseUtil::notFound());
+}
+
+// 认证
+function authToken() : array
+{
+    try {
+        $tokens = TokenUtil::checkToken();
+        if ($tokens['code']) {
+            return $tokens['data'];
+        } else {
+            echo json_encode(ResponseUtil::fail($tokens['msg']));
+            exit;
+        }
+    } catch (Exception $e) {
+        echo json_encode(ResponseUtil::fail("认证失败:".$e->getMessage()));
+        exit;
+    }
 }

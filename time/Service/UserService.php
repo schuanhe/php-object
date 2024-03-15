@@ -1,7 +1,6 @@
 <?php
-include_once __DIR__ . '/../Utils/Database.php';
-
-
+namespace Service;
+use Utils\Database;
 class UserService
 {
     private $database;
@@ -14,7 +13,6 @@ class UserService
     {
         $sql = "SELECT * FROM my_user WHERE id = :id";
         $params = array(':id' => $userId);
-        $user = new User();
         return $this->database->queryOne($sql, $params);
     }
 

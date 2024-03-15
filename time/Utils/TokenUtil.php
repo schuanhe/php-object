@@ -22,6 +22,12 @@ class TokenUtil
     // 验证令牌
     public static function verifyToken($token): array
     {
+        // 分割字符串
+        $parts = explode('.', $token);
+        if (count($parts) != 3) {
+            return array('code' => false, 'msg' => '令牌格式错误');
+        }
+
         list($base64UrlHeader, $base64UrlPayload, $base64UrlSignature) = explode('.', $token);
 
         $payload = json_decode(base64_decode(str_replace(['-', '_'], ['+', '/'], $base64UrlPayload)), true);
@@ -46,6 +52,9 @@ class TokenUtil
     // 在cookie中验证并拿出token
     public static function checkToken(): array
     {
+        if (!isset($_COOKIE['token'])) {
+            return array('code' => false, 'msg' => '未登录');
+        }
         $token = $_COOKIE['token'];
         return self::verifyToken($token);
     }
