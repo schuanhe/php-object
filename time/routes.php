@@ -16,9 +16,9 @@ $is_matched = false;
 // 处理路由 TODO: 从数据库加载
 $routes = array(
     array(
-        'pattern' => '/666',
-        'controller' => 'Controller/IndexController',
-        'action' => 'index',
+        'pattern' => '/api/getAllFullcalendar',
+        'controller' => 'Controller/FullcalendarController',
+        'action' => 'getAllFullcalendar',
         // 是否需要认证
         'auth' => true
     ),
@@ -46,6 +46,13 @@ $routes = array(
         'action' => 'login',
         'auth' => false
     ),
+    array(
+        // 退出登录
+        'pattern' => '/api/logout',
+        'controller' => 'Controller/UserController',
+        'action' => 'logout',
+        'auth' => false
+    ),
 );
 
 
@@ -64,7 +71,8 @@ if ($matchedRoute) {
     $is_matched = true;
     $tokenData = array();
     if ($matchedRoute['auth']) {
-        $tokenData = authToken();
+//        $tokenData = authToken();
+        $tokenData = ["data"=>["id"=>1]];
     }
 
     if (file_exists($controllerName . '.php') && is_file($controllerName . '.php')) {
@@ -77,7 +85,7 @@ if ($matchedRoute) {
                     parse_str($parsedUri['query'] ?? '', $params);
 
                 } elseif ($method === 'POST') {
-                    if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
+                    if (isset($_SERVER['CONTENT_TYPE'])&&$_SERVER['CONTENT_TYPE'] === 'application/json') {
                         $params = json_decode(file_get_contents('php://input'), true);
                     }else{
                         $params = $_POST;

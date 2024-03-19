@@ -47,23 +47,24 @@
     navLinks: true, // can click day/week names to navigate views
     editable: true,
     dayMaxEvents: true, // allow "more" link when too many events
-    events: [
-    {
-      groupId: '999',
-      title  : 'event1',
-      start  : '2024-02-01',
-      display: 'background'
-      
-    },
-    {
-      id: 'a',
-      groupId: '999',
-      start  : '2024-02-05',
-      end    : '2024-02-07',
-      display: 'background',
-      backgroundColor: 'red',
-    },
-  ]
+    events: '/api/getAllFullcalendar',
+  //   events: [
+  //   {
+  //     groupId: '999',
+  //     title  : 'event1',
+  //     start  : '2024-02-01',
+  //     display: 'background'
+  //
+  //   },
+  //   {
+  //     id: 'a',
+  //     groupId: '999',
+  //     start  : '2024-02-05',
+  //     end    : '2024-02-07',
+  //     display: 'background',
+  //     backgroundColor: 'red',
+  //   },
+  // ]
   });
 
 
