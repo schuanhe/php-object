@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create New Event</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/element-plus/dist/index.css"/>
+  <script src="//cdn.jsdelivr.net/npm/vue@3"></script>
+  <script src="//cdn.jsdelivr.net/npm/element-plus"></script>
+  <script src="//cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+  <script src="//unpkg.com/element-plus/dist/locale/zh-cn"></script>
+</head>
+<body>
+<div id="app">
+  <el-container>
+    <el-header>
+      <el-alert title="schuanhe 自用，其他人不能使用哦" type="success" :closable="false"/>
+    </el-header>
+    <el-main>
+      <el-card class="box-card">
+        <el-form
+                label-position="top"
+                label-width="100px"
+                :model="form"
+                style="max-width: 460px"
+        >
+          <el-text size="large">创建新事件</el-text>
+          <el-form-item label="事件名称">
+            <el-input v-model="form.eve_name" placeholder="请输入事件名称"/>
+          </el-form-item>
+          <el-form-item label="起始日期">
+            <el-date-picker
+                    v-model="form.eve_start"
+                    type="datetime"
+                    placeholder="选择日期时间">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="持续时间">
+            <el-col :span="11">
+              <el-input-number v-model="form.eve_duration.value" :min="1" placeholder="请输入数字" style="width: 100%"/>
+            </el-col>
+            <el-col :span="2" class="text-center">
+
+            </el-col>
+            <el-col :span="11">
+              <el-select v-model="form.eve_duration.unit" placeholder="选择单位" style="width: 100%">
+                <el-option label="秒" value="秒"></el-option>
+                <el-option label="分" value="分"></el-option>
+                <el-option label="时" value="时"></el-option>
+                <el-option label="天" value="天"></el-option>
+                <el-option label="周" value="周"></el-option>
+                <el-option label="月" value="月"></el-option>
+              </el-select>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="是否循环">
+            <el-switch v-model="form.is_loop" active-text="是" inactive-text="否"></el-switch>
+          </el-form-item>
+          <el-form-item label="循环持续时间" v-if="form.is_loop">
+            <el-col :span="11">
+              <el-input-number v-model="form.loop_time.value" :min="1" placeholder="请输入数字" style="width: 100%"/>
+            </el-col>
+            <el-col :span="2" class="text-center">
+
+            </el-col>
+            <el-col :span="11">
+              <el-select v-model="form.loop_time.unit" placeholder="选择单位" style="width: 100%">
+                <el-option label="秒" value="秒"></el-option>
+                <el-option label="分" value="分"></el-option>
+                <el-option label="时" value="时"></el-option>
+                <el-option label="天" value="天"></el-option>
+                <el-option label="周" value="周"></el-option>
+                <el-option label="月" value="月"></el-option>
+              </el-select>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="显示文本">
+            <el-input v-model="form.display" placeholder="请输入显示文本"/>
+          </el-form-item>
+          <el-form-item label="背景颜色">
+            <el-color-picker v-model="form.background_color"></el-color-picker>
+          </el-form-item>
+          <el-form-item label="其他信息">
+            <el-input
+                    type="textarea"
+                    v-model="form.other"
+                    autosize
+                    placeholder="请输入其他信息">
+            </el-input>
+          </el-form-item>
+          <el-button style="width: 100%;" type="primary" @click="createEvent">创建事件</el-button>
+        </el-form>
+      </el-card>
+    </el-main>
+    <el-footer>
+    </el-footer>
+  </el-container>
+</div>
+<script>
+  const { createApp, ref } = Vue;
+  const { ElMessage } = ElementPlus;
+
+  const App = {
+    setup() {
+      const form = ref({
+        eve_name: '',
+        eve_start: '',
+        eve_duration: { value: 0, unit: '秒' },
+        is_loop: false,
+        loop_time: { value: 0, unit: '秒' },
+        display: '',
+        background_color: '',
+        other: ''
+      });
+      const createEvent = async () => {
+        // 在这里添加创建事件的逻辑
+        try {
+          const response = await axios.post('./api/addEvents', {
+            eve_name: form.value.eve_name,
+            eve_start: form.value.eve_start,
+            eve_duration: convertDurationToSeconds(form.value.eve_duration),
+            is_loop: form.value.is_loop,
+            loop_time: convertDurationToSeconds(form.value.loop_time),
+            display: form.value.display,
+            background_color: form.value.background_color,
+            other: form.value.other
+          });
+          // 根据后端返回的数据进行处理
+          if (response.data.success === 200) {
+            ElMessage.success('事件创建成功');
+            // 清空表单
+            form.value = {
+              eve_name: '',
+              eve_start: '',
+              eve_duration: { value: 0, unit: '秒' },
+              is_loop: false,
+              loop_time: { value: 0, unit: '秒' },
+              display: '',
+              background_color: '',
+              other: ''
+            };
+          } else {
+            ElMessage.error(response.data.message);
+          }
+        } catch (error) {
+          ElMessage.error('创建事件失败', error);
+        }
+      };
+
+
+      function convertDurationToSeconds(duration) {
+        const unitMultipliers = {
+          秒: 1,
+          分: 60,
+          时: 3600,
+          天: 86400,
+          周: 604800,
+          月: 2592000 // 假设一个月为30天
+        };
+
+        // 检查单位是否有效
+        if (!unitMultipliers.hasOwnProperty(duration.unit)) {
+          throw new Error(`无效的时间单位: ${duration.unit}`);
+        }
+        // 计算总秒数
+        return duration.value * unitMultipliers[duration.unit];
+      }
+
+      return { form, createEvent };
+    },
+  };
+
+  const app = createApp(App);
+  app.use(ElementPlus, {locale: ElementPlusLocaleZhCn,});
+  app.mount('#app');
+</script>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+  }
+
+  #app {
+    height: 100%;
+    width: 100%;
+  }
+
+  .box-card {
+    max-width: 460px;
+    margin: auto;
+  }
+
+</style>
+
+</body>
+</html>

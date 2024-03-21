@@ -68,13 +68,8 @@
                     ElMessage.success('登录成功');  
                     // 设置token，这里假设后端返回的token存在response.data.token中
                     const token = response.data.data.token;
-          
-                    // 设置到期时间为data.exp（时间戳格式）
-                        const expirationTime = new Date(response.data.data.exp * 1000); // Convert timestamp to milliseconds
-                    // 将token和到期时间设置到cookie中
-                    document.cookie = `token=${token}; expires=${expirationTime.toUTCString()}; path=/`;
-                    // 跳转到首页
-                    window.location.href = './index.html';
+                    localStorage.setItem('token', token);
+                    window.location.href = './index';
                 } else {
                     ElMessage.error(response.data.message);
                 }

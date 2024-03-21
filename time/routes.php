@@ -53,6 +53,13 @@ $routes = array(
         'action' => 'logout',
         'auth' => false
     ),
+    array(
+        'pattern' => '/api/addEvents',
+        'controller' => 'Controller/EventsController',
+        'action' => 'addEvents',
+        'auth' => true
+    ),
+
 );
 
 
@@ -71,8 +78,8 @@ if ($matchedRoute) {
     $is_matched = true;
     $tokenData = array();
     if ($matchedRoute['auth']) {
-//        $tokenData = authToken();
-        $tokenData = ["data"=>["id"=>1]];
+        $tokenData = authToken();
+//        $tokenData = ["data"=>["id"=>1]];
     }
 
     if (file_exists($controllerName . '.php') && is_file($controllerName . '.php')) {

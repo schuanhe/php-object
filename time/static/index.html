@@ -21,7 +21,7 @@
     <script src='//cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.11/index.global.min.js'></script>
     <script src="//cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/locales-all.global.min.js"></script>
     <!-- the rrule-to-fullcalendar connector. must go AFTER the rrule lib -->
-    
+
 </head>
 
 <body>
@@ -38,71 +38,58 @@
             </el-footer>
         </el-container>
     </div>
-    <script>
+    <script>        // 假设 token 存储在 localStorage 中
+    function checkToken() {
+        return localStorage.getItem('token') !== null;
+    }
 
-        const { createApp, ref, onMounted } = Vue;
-        const { ElMessage } = ElementPlus;
-        // console.log(rrule);
-        const App = {
-            setup() {
-                
-                const form = ref({
-                    name: '',
-                    password: ''
-                });
-                const calendarOptions = ref({
-                    initialView: 'dayGridMonth',
-                    headerToolbar: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
-                    },
-                    locale: 'zh-cn',
-                    buttonIcons: false,
-                    weekNumbers: true,
-                    navLinks: true,
-                    editable: true,
-                    dayMaxEvents: true,
-                    events: '/myfeed.php',
-                    // [
-                    //     {
-                    //         title: '周期测试',
-                    //         // rrule: 'FREQ=DAILY;INTERVAL=28',
-                            
-                    //         display: 'background',
-                    //         backgroundColor: 'red',
-                    //         start: '2024-03-05',
-                    //         end: '2024-03-07',
-                    //     },                                          
-                        
-                    //     {
-                    //         id: 'a',
-                    //         groupId: '999',
-                    //         start: '2024-03-05',
-                    //         end: '2024-03-07',
-                    //         display: 'background',
-                    //         backgroundColor: 'red',
-                    //     },
-                    // ],
-                });
+    const { createApp, ref, onMounted } = Vue;
+    const { ElMessage } = ElementPlus;
 
-                const calendar = ref(null);
+    const App = {
+        setup() {
+            const form = ref({
+                name: '',
+                password: ''
+            });
+            const calendarOptions = ref({
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
+                },
+                locale: 'zh-cn',
+                buttonIcons: false,
+                weekNumbers: true,
+                navLinks: true,
+                editable: true,
+                dayMaxEvents: true,
+                events: '/api/getAllFullcalendar',
+            });
 
-                onMounted(() => {
+            const calendar = ref(null);
+
+            onMounted(() => {
+                if (!checkToken()) {
+                    // 若无 token，则跳转到登录页
+                    window.location.href = '/login'; // 替换为你的登录页面路径
+                } else {
                     // 初始化FullCalendar
                     const calendarEl = calendar.value;
                     calendar.value = new FullCalendar.Calendar(calendarEl, calendarOptions.value);
                     calendar.value.render();
-                });
+                }
+            });
 
-                return { form, calendarOptions, calendar };
-            }
-        };
+            return { form, calendarOptions, calendar };
+        }
+    };
 
-        const app = createApp(App);
+    const app = createApp(App);
 
-        app.use(ElementPlus);
-        app.mount('#app');
+    app.use(ElementPlus);
+    app.mount('#app');
     </script>
 </body>
 
