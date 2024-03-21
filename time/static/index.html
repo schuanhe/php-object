@@ -27,8 +27,11 @@
 <body>
     <div id="app">
         <el-container>
-            <el-header>
+            <el-header style="text-align: center;">
                 <el-alert title="schuanhe 自用，其他人不能使用哦" type="success" :closable="false" />
+                <el-button @click="addEve">添加事件</el-button>
+                <el-button @click="sysEve">管理事件</el-button>
+                <el-button @click="logout">退出登录</el-button>
             </el-header>
             <el-main>
                 <div ref="calendar"></div>
@@ -82,7 +85,20 @@
                 }
             });
 
-            return { form, calendarOptions, calendar };
+            const logout = () => {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+            };
+
+            const addEve = () => {
+                window.location.href = '/addeve';
+            };
+
+            const sysEve = () => {
+                window.location.href = '/syseve';
+            };
+
+            return { form, calendarOptions, calendar, logout, addEve, sysEve };
         }
     };
 

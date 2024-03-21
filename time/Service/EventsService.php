@@ -35,4 +35,19 @@ class EventsService
         }
 
     }
+
+    public function deleteEvents($userId, $params): bool
+    {
+        $sql = "DELETE FROM my_events WHERE user_id = :user AND id = :id";
+        if (isset($params['id'])) {
+            $params = array(':user' => $userId, ':id' => $params['id']);
+            if ($this->database->execute($sql, $params)) {
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
 }

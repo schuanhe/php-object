@@ -59,6 +59,12 @@ $routes = array(
         'action' => 'addEvents',
         'auth' => true
     ),
+    array(
+        'pattern' => '/api/deleteEvents',
+        'controller' => 'Controller/EventsController',
+        'action' => 'deleteEvents',
+        'auth' => true
+    ),
 
 );
 

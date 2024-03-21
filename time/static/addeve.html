@@ -14,6 +14,7 @@
   <el-container>
     <el-header>
       <el-alert title="schuanhe 自用，其他人不能使用哦" type="success" :closable="false"/>
+      <el-button @click="goIndex">回到首页</el-button>
     </el-header>
     <el-main>
       <el-card class="box-card">
@@ -138,6 +139,7 @@
               background_color: '',
               other: ''
             };
+            window.location.href = '/index'; //
           } else {
             ElMessage.error(response.data.message);
           }
@@ -164,8 +166,11 @@
         // 计算总秒数
         return duration.value * unitMultipliers[duration.unit];
       }
+      const goIndex = () => {
+        window.location.href = '/index';
+      };
 
-      return { form, createEvent };
+      return { form, createEvent, goIndex };
     },
   };
 
