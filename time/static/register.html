@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!-- Import style -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/element-plus/dist/index.css"/>
+  <!-- Import Vue 3 -->
+  <script src="//cdn.jsdelivr.net/npm/vue@3"></script>
+  <!-- Import component library -->
+  <script src="//cdn.jsdelivr.net/npm/element-plus"></script>
+  <!-- Import axios -->
+  <script src="//cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
+</head>
+<body>
+<!--设置app铺满整个页面-->
+<div id="app">
+  <el-container>
+    <el-header>
+      <el-alert title="schuanhe 自用，其他人不能使用哦" type="success" :closable="false"/>
+    </el-header>
+    <el-main>
+      <el-card class="box-card">
+        <el-form
+                label-position="top"
+                label-width="100px"
+                :model="form"
+                style="max-width: 460px"
+        >
+          <el-text size="large">注册你的账号</el-text>
+          <el-form-item label="用户名">
+            <el-input v-model="form.name"/>
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input type="password" v-model="form.password"/>
+          </el-form-item>
+          <el-button style="width: 100%;" type="primary" @click="register">注册</el-button>
+          <el-button style="width: 100%;" type="primary" @click="goLogin">返回登录</el-button>
+        </el-form>
+      </el-card>
+    </el-main>
+    <el-footer>
+
+    </el-footer>
+  </el-container>
+</div>
+<script>
+  /* global Vue, ElementPlus,axios */
+  const {createApp, ref} = Vue;
+  const {ElMessage} = ElementPlus;
+
+  const App = {
+    setup() {
+      const form = ref({
+        name: '',
+        password: ''
+      });
+      // 使用注册方法
+      const register = async () => {
+
+        try {
+          const response = await axios.post('./api/register', {
+            name: form.value.name,
+            password: form.value.password,
+          });
+          // 根据后端返回的数据进行处理
+          if (response.data.success === 200) {
+            ElMessage.success('注册成功');
+            // 设置token，这里假设后端返回的token存在response.data.token中
+            const token = response.data.data.token;
+            localStorage.setItem('token', token);
+            window.location.href = './index';
+          } else {
+            ElMessage.error(response.data.message);
+          }
+        } catch (error) {
+          ElMessage.error('注册请求失败');
+        }
+      };
+      const goLogin = () => {
+        window.location.href = './login';
+      };
+      return {form, register, goLogin};
+    }
+  };
+
+
+  const app = createApp(App);
+  app.use(ElementPlus);
+  app.mount('#app');
+</script>
+</body>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+  }
+
+  #app {
+    height: 100%;
+    width: 100%;
+  }
+
+  .box-card {
+    max-width: 460px;
+    margin: auto;
+  }
+
+  .el-main {
+    /*    设置内部居中*/
+    text-align: center;
+    line-height: 60px;
+  }
+</style>
+</html>

@@ -76,7 +76,7 @@
       const deleteEvent = async (eventId) => {
         try {
           const response = await axios.post(`/api/deleteEvents`, { id: eventId });
-          if (response.data.code === 200) {
+          if (response.data.success === 200) {
             ElMessage.success('删除事件成功');
           } else {
             ElMessage.error('删除事件失败', response.data.message);

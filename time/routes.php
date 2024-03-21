@@ -47,6 +47,12 @@ $routes = array(
         'auth' => false
     ),
     array(
+        'pattern' => '/api/register',
+        'controller' => 'Controller/UserController',
+        'action' => 'register',
+        'auth' => false
+    ),
+    array(
         // 退出登录
         'pattern' => '/api/logout',
         'controller' => 'Controller/UserController',

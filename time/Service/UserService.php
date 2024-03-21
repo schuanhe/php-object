@@ -22,4 +22,12 @@ class UserService
         $params = array(':name' => $name, ':password' => $password);
         return $this->database->queryOne($sql, $params);
     }
+
+    // 返回注册的id
+    public function addUser($name, $password): int
+    {
+        $sql = "INSERT INTO my_user (name, password) VALUES (:name, :password)";
+        $params = array(':name' => $name, ':password' => $password);
+        return $this->database->insert($sql, $params);
+    }
 }
