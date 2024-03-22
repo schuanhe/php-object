@@ -21,7 +21,7 @@ $is_matched = false;
 $routes = array(
     array(
         'pattern' => '/api/getAllFullcalendar',
-        'controller' => 'Controller\\FullcalendarController',
+        'controller' => 'Controller/FullcalendarController',
         'action' => 'getAllFullcalendar',
         // 是否需要认证
         'auth' => true
@@ -34,32 +34,26 @@ $routes = array(
     ),
     array(
         'pattern' => '/api/getEventsList',
-        'controller' => 'Controller\\EventsController',
+        'controller' => 'Controller/EventsController',
         'action' => 'getEventsByUserId',
         'auth' => true
     ),
     array(
-        'pattern' => '/test2',
-        'controller' => 'Controller\\UserController',
-        'action' => 'register',
-        'auth' => false
-    ),
-    array(
         'pattern' => '/api/login',
-        'controller' => 'Controller\\UserController',
+        'controller' => 'Controller/UserController',
         'action' => 'login',
         'auth' => false
     ),
     array(
         'pattern' => '/api/register',
-        'controller' => 'Controller\\UserController',
+        'controller' => 'Controller/UserController',
         'action' => 'register',
         'auth' => false
     ),
     array(
         // 退出登录
         'pattern' => '/api/logout',
-        'controller' => 'Controller\\UserController',
+        'controller' => 'Controller/UserController',
         'action' => 'logout',
         'auth' => false
     ),
@@ -100,8 +94,8 @@ if ($matchedRoute) {
 
     if (file_exists($controllerName . '.php') && is_file($controllerName . '.php')) {
         try {
-//            $className = basename($controllerName);
-            $controller = new $controllerName();
+            $className = str_replace('/', '\\', $controllerName);
+            $controller = new $className();
             // 调用相应的操作
             if (method_exists($controller, $actionName)) {
                 if ($method === 'GET') {

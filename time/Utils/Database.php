@@ -11,7 +11,7 @@ class Database {
         if (!extension_loaded('sqlite3')) {
             die('SQLite3 扩展未加载，请检查配置');
         }
-        $this->db = new SQLite3(__DIR__ . '/../Data/mydatabase.db');
+        $this->db = new SQLite3(DB_PATH);
     }
 
     public function __destruct() {
