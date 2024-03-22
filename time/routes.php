@@ -33,6 +33,12 @@ $routes = array(
         'auth' => false
     ),
     array(
+        'pattern' => '/install',
+        'controller' => 'install',
+        'action' => 'init',
+        'auth' => false
+    ),
+    array(
         'pattern' => '/api/getEventsList',
         'controller' => 'Controller/EventsController',
         'action' => 'getEventsByUserId',
