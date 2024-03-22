@@ -5,6 +5,7 @@ use Utils\TokenUtil;
 
 $rawUri = $_SERVER['REQUEST_URI'];
 
+$rawUri = str_replace(OBJ_PATH, '', $rawUri);
 // 使用 parse_url 解析 URI，提取路径部分
 $parsedUri = parse_url($rawUri);
 $uri = $parsedUri['path'];
@@ -32,7 +33,7 @@ $routes = array(
         'auth' => false
     ),
     array(
-        'pattern' => '/test',
+        'pattern' => '/api/getEventsList',
         'controller' => 'Controller\\EventsController',
         'action' => 'getEventsByUserId',
         'auth' => true

@@ -139,7 +139,7 @@
               background_color: '',
               other: ''
             };
-            window.location.href = '/index'; //
+            window.location.href = './index'; //
           } else {
             ElMessage.error(response.data.message);
           }
@@ -167,7 +167,7 @@
         return duration.value * unitMultipliers[duration.unit];
       }
       const goIndex = () => {
-        window.location.href = '/index';
+        window.location.href = './index';
       };
 
       return { form, createEvent, goIndex };

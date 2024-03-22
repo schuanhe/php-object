@@ -65,7 +65,7 @@
 
       const fetchEvents = async () => {
         try {
-          const response = await axios.get('/test');
+          const response = await axios.get('./api/getEventsList');
           events.value = response.data.data;
         } catch (error) {
           console.error('Error fetching events:', error);
@@ -75,7 +75,7 @@
 
       const deleteEvent = async (eventId) => {
         try {
-          const response = await axios.post(`/api/deleteEvents`, { id: eventId });
+          const response = await axios.post(`./api/deleteEvents`, { id: eventId });
           if (response.data.success === 200) {
             ElMessage.success('删除事件成功');
           } else {
@@ -88,7 +88,7 @@
       };
 
       const goIndex = () => {
-        window.location.href = '/index';
+        window.location.href = './index';
       };
       return {
         events,

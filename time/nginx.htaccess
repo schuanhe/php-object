@@ -1,5 +1,5 @@
 location /time/ {
     if (!-e $request_filename) {
-        rewrite ^/time/(.*)?$ /time/index.php?/$1 last;
+        rewrite ^/(.*)?$ /index.php?/$1 last;
     }
 }

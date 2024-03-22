@@ -68,7 +68,7 @@
                 navLinks: true,
                 editable: true,
                 dayMaxEvents: true,
-                events: '/api/getAllFullcalendar',
+                events: './api/getAllFullcalendar',
             });
 
             const calendar = ref(null);
@@ -76,7 +76,7 @@
             onMounted(() => {
                 if (!checkToken()) {
                     // 若无 token，则跳转到登录页
-                    window.location.href = '/login'; // 替换为你的登录页面路径
+                    window.location.href = './login'; // 替换为你的登录页面路径
                 } else {
                     // 初始化FullCalendar
                     const calendarEl = calendar.value;
@@ -87,15 +87,15 @@
 
             const logout = () => {
                 localStorage.removeItem('token');
-                window.location.href = '/login';
+                window.location.href = './login';
             };
 
             const addEve = () => {
-                window.location.href = '/addeve';
+                window.location.href = './addeve';
             };
 
             const sysEve = () => {
-                window.location.href = '/syseve';
+                window.location.href = './syseve';
             };
 
             return { form, calendarOptions, calendar, logout, addEve, sysEve };
