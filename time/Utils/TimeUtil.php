@@ -1,4 +1,7 @@
 <?php
+namespace Utils;
+use DateInterval;
+use Exception;
 
 class TimeUtil
 {

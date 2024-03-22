@@ -1,5 +1,5 @@
 <?php
-
+namespace Utils;
 class ResponseUtil
 {
     public static function success($data = null, $message = '操作成功'): array

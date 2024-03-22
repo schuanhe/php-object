@@ -1,5 +1,8 @@
 <?php
+namespace Controller;
 use Service\EventsService;
+use Utils\ResponseUtil;
+use Utils\TimeUtil;
 
 class EventsController
 {

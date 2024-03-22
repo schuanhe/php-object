@@ -1,6 +1,9 @@
 <?php
+namespace Controller;
 use Service\EventsService;
-use Service\UserService;
+use Utils\FullcalendarUtil;
+use Utils\ResponseUtil;
+
 class FullcalendarController
 {
     private $userId;
@@ -9,7 +12,6 @@ class FullcalendarController
     // 构造函数
 
     /**
-     * @throws Exception
      */
     public function __construct()
     {

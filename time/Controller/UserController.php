@@ -1,5 +1,8 @@
 <?php
+namespace Controller;
 use Service\UserService;
+use Utils\ResponseUtil;
+use Utils\TokenUtil;
 
 class UserController
 {

@@ -1,4 +1,7 @@
 <?php
+
+namespace Utils;
+
 class TokenUtil
 {
     public static $secret_key = "schuanhe";

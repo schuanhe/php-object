@@ -1,5 +1,8 @@
 <?php
 // 获取原始的 URI
+use Utils\ResponseUtil;
+use Utils\TokenUtil;
+
 $rawUri = $_SERVER['REQUEST_URI'];
 
 // 使用 parse_url 解析 URI，提取路径部分
@@ -17,7 +20,7 @@ $is_matched = false;
 $routes = array(
     array(
         'pattern' => '/api/getAllFullcalendar',
-        'controller' => 'Controller/FullcalendarController',
+        'controller' => 'Controller\\FullcalendarController',
         'action' => 'getAllFullcalendar',
         // 是否需要认证
         'auth' => true
@@ -30,44 +33,44 @@ $routes = array(
     ),
     array(
         'pattern' => '/test',
-        'controller' => 'Controller/EventsController',
+        'controller' => 'Controller\\EventsController',
         'action' => 'getEventsByUserId',
         'auth' => true
     ),
     array(
         'pattern' => '/test2',
-        'controller' => 'Controller/UserController',
+        'controller' => 'Controller\\UserController',
         'action' => 'register',
         'auth' => false
     ),
     array(
         'pattern' => '/api/login',
-        'controller' => 'Controller/UserController',
+        'controller' => 'Controller\\UserController',
         'action' => 'login',
         'auth' => false
     ),
     array(
         'pattern' => '/api/register',
-        'controller' => 'Controller/UserController',
+        'controller' => 'Controller\\UserController',
         'action' => 'register',
         'auth' => false
     ),
     array(
         // 退出登录
         'pattern' => '/api/logout',
-        'controller' => 'Controller/UserController',
+        'controller' => 'Controller\\UserController',
         'action' => 'logout',
         'auth' => false
     ),
     array(
         'pattern' => '/api/addEvents',
-        'controller' => 'Controller/EventsController',
+        'controller' => 'Controller\\EventsController',
         'action' => 'addEvents',
         'auth' => true
     ),
     array(
         'pattern' => '/api/deleteEvents',
-        'controller' => 'Controller/EventsController',
+        'controller' => 'Controller\\EventsController',
         'action' => 'deleteEvents',
         'auth' => true
     ),
@@ -96,8 +99,8 @@ if ($matchedRoute) {
 
     if (file_exists($controllerName . '.php') && is_file($controllerName . '.php')) {
         try {
-            $className = basename($controllerName);
-            $controller = new $className();
+//            $className = basename($controllerName);
+            $controller = new $controllerName();
             // 调用相应的操作
             if (method_exists($controller, $actionName)) {
                 if ($method === 'GET') {
