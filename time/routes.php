@@ -65,13 +65,13 @@ $routes = array(
     ),
     array(
         'pattern' => '/api/addEvents',
-        'controller' => 'Controller\\EventsController',
+        'controller' => 'Controller/EventsController',
         'action' => 'addEvents',
         'auth' => true
     ),
     array(
         'pattern' => '/api/deleteEvents',
-        'controller' => 'Controller\\EventsController',
+        'controller' => 'Controller/EventsController',
         'action' => 'deleteEvents',
         'auth' => true
     ),
@@ -128,6 +128,8 @@ if ($matchedRoute) {
     }else if (file_exists($controllerName) && is_file($controllerName)) {
         header('Content-Type: text/html');
         readfile($controllerName);
+    }else{
+        echo json_encode(ResponseUtil::error('控制器不存在'));
     }
 }
 

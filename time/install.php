@@ -24,6 +24,10 @@ class Install
             exit();
         }
 
+        // 判断DB_PATH路径是否存在
+        if (!is_dir(dirname(DB_PATH))) {
+            mkdir(dirname(DB_PATH), 0777, true);
+        }
 
         $db = new SQLite3(DB_PATH);
         // 创建表
